@@ -44,15 +44,24 @@ func getCommand() int {
 }
 
 func monitor() {
-	site := "https://alura.com.br/"
-	fmt.Println("Monitorando...", site)
-	resp, _ := http.Get(site)
-	isSuccess := resp.StatusCode >= 200 && resp.StatusCode <= 299
+	sites := []string{
+		"https://random-status-code.herokuapp.com/",
+		"https://www.google.com.br",
+		"https://www.facebook.com",
+		"https://www.alura.com.br",
+		"https://www.caelum.com.br",
+	}
 
-	if isSuccess {
-		fmt.Println("Site:", site, "está online. Status Code:", resp.StatusCode)
-	} else {
-		fmt.Println("Site:", site, "está com problemas. Status Code:", resp.StatusCode)
+	for i := 0; i < len(sites); i++ {
+		fmt.Println("Monitorando...", sites[i])
+		resp, _ := http.Get(sites[i])
+		isSuccess := resp.StatusCode >= 200 && resp.StatusCode <= 299
+
+		if isSuccess {
+			fmt.Println("Site:", sites[i], "está online. Status Code:", resp.StatusCode)
+		} else {
+			fmt.Println("Site:", sites[i], "está com problemas. Status Code:", resp.StatusCode)
+		}
 	}
 }
 
