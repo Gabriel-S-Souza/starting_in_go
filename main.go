@@ -18,6 +18,8 @@ func main() {
 		if command == 1 {
 			monitor()
 		} else if command == 2 {
+			showLogs()
+		} else if command == 3 {
 			exit()
 		} else {
 			handleUnknownCommand()
@@ -40,7 +42,8 @@ func initialise() {
 
 func showMenu() {
 	fmt.Println("1- Iniciar monitoramento")
-	fmt.Println("2- Sair do programa")
+	fmt.Println("2- Exibir logs")
+	fmt.Println("3- Sair do programa")
 	fmt.Println("")
 }
 
@@ -54,7 +57,7 @@ func monitor() {
 	sites := getWebsites(filePath)
 
 	for _, site := range sites {
-		fmt.Println("Monitorando...", site)
+		fmt.Println("Testando...", site)
 		resp, err := http.Get(site)
 		isSuccess := resp.StatusCode >= 200 && resp.StatusCode <= 299
 
@@ -64,12 +67,25 @@ func monitor() {
 			fmt.Println("Site:", site, "está com problemas. Status Code:", resp.StatusCode)
 		}
 
+		registerLog(site, isSuccess)
+
 		if err != nil {
 			fmt.Println("Ocorreu um erro:", err)
 		}
 
 		fmt.Println("")
 	}
+}
+
+func showLogs() {
+	fmt.Println("Exibindo logs...")
+	fileBytes, err := os.ReadFile("log.txt")
+
+	if err != nil {
+		fmt.Println("Ocorreu um erro:", err)
+	}
+
+	fmt.Println(string(fileBytes))
 }
 
 func exit() {
@@ -99,4 +115,24 @@ func getWebsites(filePath string) []string {
 	sites := strings.Split(fileString, "\n")
 
 	return sites
+}
+
+func registerLog(site string, status bool) {
+	file, err := os.OpenFile("log.txt", os.O_RDWR|os.O_CREATE|os.O_APPEND, 0666)
+
+	if err != nil {
+		fmt.Println("Ocorreu um erro:", err)
+	}
+
+	var statusText string
+	if status {
+		statusText = "online"
+	} else {
+		statusText = "offline"
+	}
+
+	now := time.Now().Format("02/01/2006 15:04:05")
+
+	file.WriteString(now + " - " + site + " - " + statusText + "\n")
+	file.Close()
 }
