@@ -10,15 +10,25 @@ import (
 	"time"
 )
 
+var filePath string
+
 func main() {
 	initialise()
+
+	if len(os.Args) > 1 {
+		filePath = os.Args[1]
+	} else {
+		fmt.Println("Informe o caminho do arquivo:")
+		fmt.Scan(&filePath)
+	}
+
 	for {
 		showMenu()
 		command := getCommand()
 
 		if command == 1 {
-			path := os.Args[1]
-			monitor(path)
+
+			monitor()
 		} else if command == 2 {
 			exit()
 		} else {
@@ -44,7 +54,7 @@ func getCommand() int {
 	return command
 }
 
-func monitor(filePath string) {
+func monitor() {
 	sites := getWebsites(filePath)
 
 	for i := 0; i < len(sites); i++ {
