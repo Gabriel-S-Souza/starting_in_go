@@ -17,18 +17,14 @@ Iniciando...
 Monitorando... https://www.google.com.br
 Site: https://www.google.com.br está online. Status Code: 200
 
-
 Monitorando... https://www.facebook.com
 Site: https://www.facebook.com está online. Status Code: 200
-
 
 Monitorando... https://twitter.com
 Site: https://twitter.com está com problemas. Status Code: 302
 
-
 Monitorando... https://www.instagram.com
 Site: https://www.instagram.com está online. Status Code: 200
-
 
 1- Iniciar monitoramento
 2- Sair do programa
