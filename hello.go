@@ -15,13 +15,6 @@ var filePath string
 func main() {
 	initialise()
 
-	if len(os.Args) > 1 {
-		filePath = os.Args[1]
-	} else {
-		fmt.Println("Informe o caminho do arquivo:")
-		fmt.Scan(&filePath)
-	}
-
 	for {
 		showMenu()
 		command := getCommand()
@@ -41,6 +34,13 @@ func main() {
 
 func initialise() {
 	fmt.Println("Iniciando...")
+
+	if len(os.Args) > 1 {
+		filePath = os.Args[1]
+	} else {
+		fmt.Println("Informe o caminho do arquivo:")
+		fmt.Scan(&filePath)
+	}
 }
 
 func showMenu() {
