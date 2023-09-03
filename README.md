@@ -1,6 +1,6 @@
 # website_status_monitor
 
-This tool is a command line program that monitors websites listed in some txt file by checking their HTTP status code.
+Command line program that monitors websites listed in some txt file by checking their HTTP status code.
 
 To use it, pass a .txt file path that contains the list of sites in the initialization command or when the program requests it.
 
