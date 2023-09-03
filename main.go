@@ -67,6 +67,7 @@ func monitor() {
 		} else {
 			fmt.Println("Site:", sites[i], "está com problemas. Status Code:", resp.StatusCode)
 		}
+		fmt.Println("\n")
 	}
 }
 
