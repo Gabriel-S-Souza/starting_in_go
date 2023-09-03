@@ -1,9 +1,7 @@
 package main
 
 import (
-	"bufio"
 	"fmt"
-	"io"
 	"net/http"
 	"os"
 	"strings"
@@ -14,13 +12,10 @@ var filePath string
 
 func main() {
 	initialise()
-
 	for {
 		showMenu()
 		command := getCommand()
-
 		if command == 1 {
-
 			monitor()
 		} else if command == 2 {
 			exit()
@@ -46,6 +41,7 @@ func initialise() {
 func showMenu() {
 	fmt.Println("1- Iniciar monitoramento")
 	fmt.Println("2- Sair do programa")
+	fmt.Println("")
 }
 
 func getCommand() int {
@@ -57,17 +53,22 @@ func getCommand() int {
 func monitor() {
 	sites := getWebsites(filePath)
 
-	for i := 0; i < len(sites); i++ {
-		fmt.Println("Monitorando...", sites[i])
-		resp, _ := http.Get(sites[i])
+	for _, site := range sites {
+		fmt.Println("Monitorando...", site)
+		resp, err := http.Get(site)
 		isSuccess := resp.StatusCode >= 200 && resp.StatusCode <= 299
 
 		if isSuccess {
-			fmt.Println("Site:", sites[i], "está online. Status Code:", resp.StatusCode)
+			fmt.Println("Site:", site, "está online. Status Code:", resp.StatusCode)
 		} else {
-			fmt.Println("Site:", sites[i], "está com problemas. Status Code:", resp.StatusCode)
+			fmt.Println("Site:", site, "está com problemas. Status Code:", resp.StatusCode)
 		}
-		fmt.Println("\n")
+
+		if err != nil {
+			fmt.Println("Ocorreu um erro:", err)
+		}
+
+		fmt.Println("")
 	}
 }
 
@@ -82,25 +83,20 @@ func handleUnknownCommand() {
 }
 
 func getWebsites(filePath string) []string {
-	file, err := os.Open(filePath)
+	fileBytes, err := os.ReadFile(filePath)
+
 	if err != nil {
-		fmt.Println(err)
-		return nil
-	}
-
-	reader := bufio.NewReader(file)
-
-	var sites []string
-
-	for {
-		line, err := reader.ReadString('\n')
-		if err == io.EOF {
-			break
+		var errorText string
+		if os.IsNotExist(err) {
+			errorText = "Ocorreu um erro: o arquivo " + filePath + " não existe"
+		} else {
+			errorText = "Ocorreu um erro: " + err.Error()
 		}
-
-		sites = append(sites, strings.TrimSpace(line))
+		fmt.Println("Ocorreu um erro:", errorText)
 	}
 
-	file.Close()
+	fileString := strings.TrimSpace(string(fileBytes))
+	sites := strings.Split(fileString, "\n")
+
 	return sites
 }
