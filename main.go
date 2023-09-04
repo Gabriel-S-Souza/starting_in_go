@@ -104,9 +104,9 @@ func getWebsites(filePath string) []string {
 	if err != nil {
 		var errorText string
 		if os.IsNotExist(err) {
-			errorText = "Ocorreu um erro: o arquivo " + filePath + " não existe"
+			errorText = "o arquivo " + filePath + " não existe"
 		} else {
-			errorText = "Ocorreu um erro: " + err.Error()
+			errorText = err.Error()
 		}
 		fmt.Println("Ocorreu um erro:", errorText)
 	}
@@ -117,7 +117,7 @@ func getWebsites(filePath string) []string {
 	return sites
 }
 
-func registerLog(site string, status bool) {
+func registerLog(site string, isSuccess bool) {
 	file, err := os.OpenFile("log.txt", os.O_RDWR|os.O_CREATE|os.O_APPEND, 0666)
 
 	if err != nil {
@@ -125,7 +125,7 @@ func registerLog(site string, status bool) {
 	}
 
 	var statusText string
-	if status {
+	if isSuccess {
 		statusText = "online"
 	} else {
 		statusText = "offline"
